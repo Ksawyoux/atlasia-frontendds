@@ -104,7 +104,7 @@ export default function PropertyLayout({
   const resolvedCardTitle = ctaTitle || "Réserver ce logement";
   const defaultButtonText = !isLoggedIn ? "🔒 Connectez-vous pour réserver" : "Réserver";
   const resolvedButtonText = customButtonLabel || defaultButtonText;
-  const defaultDisabled = !isLoggedIn || !checkIn || !checkOut || !guestsValid;
+  const defaultDisabled = !checkIn || !checkOut || !guestsValid;
   const resolvedDisabled = typeof customButtonDisabled === "boolean" ? customButtonDisabled : defaultDisabled;
   const finalButtonDisabled = resolvedDisabled || !!customButtonLoading;
   const resolvedInfoMessage = customInfoMessage || null;
@@ -123,6 +123,12 @@ export default function PropertyLayout({
   })();
 
   const handlePrimaryAction = () => {
+    if (!isLoggedIn) {
+      setError("");
+      setShowLogin(true);
+      return;
+    }
+
     if (customOnAction) {
       setError("");
       customOnAction({ checkIn, checkOut, guests });
